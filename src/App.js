@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import Student from "./Student";
 import AddStudentForm from "./Studentform";
-// import NewCount from "./Hello";
+import NewCount from "./Hello";
 
 function App() {
   const [student, setStudent] = useState([]);
@@ -145,7 +145,7 @@ function App() {
 
   return (
     <div>
-      {/* <NewCount /> */}
+      <NewCount /> 
 
       <AddStudentForm
         name={name}
