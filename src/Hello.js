@@ -1,40 +1,36 @@
-import { useState,useMemo } from "react";
-import { resume } from "react-dom/server";
+import { useState, useMemo } from "react";
 
+function NewCount() {
+  const [count, setCount] = useState(5);
+  const [data, setData] = useState(1);
 
-function NewCount(){
-    const[count,setCount] = useState(5);
-    const [data,setData] = useState(1);
-    const [result,setResult] = useState("")
-    function incrementCount(){
-        setCount(count+5)
-        
-    }
+  function incrementCount() {
+    setCount((prev) => prev + 5);
+  }
 
-    function incrementData(){
-        setData(data+1)
-    }
+  function incrementData() {
+    setData((prev) => prev + 1);
+  }
 
-    const result1=useMemo(()=>{
-        console.log("result function called ")
-return count*10000;
-    },[count])
+  const result1 = useMemo(() => {
+    console.log("result function called");
+    return count * 10000;
+  }, [count]);
 
-    return(
-        <>
-        <button onClick={incrementData}>increment data</button>
-        <button onClick={incrementCount}>increment count</button>
+  return (
+    <>
+      <button type="button" onClick={incrementData}>
+        Increment Data
+      </button>
+      <button type="button" onClick={incrementCount}>
+        Increment Count
+      </button>
 
-    <h1>Count : {count}</h1>
-<h1>Dta is :{data}</h1>
-<h1>function called is :{result1}</h1>
- 
-     
-       
-</>
-
-
-    )
+      <h1>Count : {count}</h1>
+      <h1>Data is : {data}</h1>
+      <h1>Calculated result is : {result1}</h1>
+    </>
+  );
 }
 
 export default NewCount;

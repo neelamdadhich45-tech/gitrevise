@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import Student from "./Student";
 import AddStudentForm from "./Studentform";
-// import NewCount from "./Hello";
 
 function App() {
   const [student, setStudent] = useState([]);
@@ -17,9 +16,15 @@ function App() {
 
   // 1. GET API
   async function getdata() {
-    const takeresponse = await fetch("https://mymeeshoweb.onrender.com/getdatastudent");
-    const takedata = await takeresponse.json();
-    setStudent(takedata);
+    try {
+      const takeresponse = await fetch(
+        "https://mymeeshoweb.onrender.com/getdatastudent"
+      );
+      const takedata = await takeresponse.json();
+      setStudent(takedata);
+    } catch (error) {
+      console.error("GET error:", error);
+    }
   }
 
   useEffect(() => {
@@ -45,24 +50,32 @@ function App() {
       return;
     }
 
-    const newRecord = { name, age, mobile, course, email };
+    try {
+      const newRecord = { name, age, mobile, course, email };
 
-    const optionapi = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(newRecord)
-    };
+      const optionapi = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newRecord),
+      };
 
-    const response = await fetch("https://mymeeshoweb.onrender.com/insertdatastudent", optionapi);
-    const result = await response.json();
+      const response = await fetch(
+        "https://mymeeshoweb.onrender.com/insertdatastudent",
+        optionapi
+      );
+      const result = await response.json();
 
-    if (result.statuscode == 200) {
-      getdata();
-      alert("data inserted");
-      handleCancel();
-    } else {
+      if (result.statuscode == 200) {
+        getdata();
+        alert("data inserted");
+        handleCancel();
+      } else {
+        alert("data not inserted");
+      }
+    } catch (error) {
+      console.error("POST error:", error);
       alert("data not inserted");
     }
   };
@@ -80,23 +93,32 @@ function App() {
 
   // 3. DELETE API (name ke basis par)
   const handleDelete = async (item) => {
-    console.log(item, "Deleted");
+    try {
+      console.log(item, "Deleted");
 
-    const optionapi = {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: ""
-    };
+      const optionapi = {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
 
-    const response = await fetch(`https://mymeeshoweb.onrender.com/deletedatastudent/${item.name}`, optionapi);
-    const result = await response.json();
+      const response = await fetch(
+        `https://mymeeshoweb.onrender.com/deletedatastudent/${encodeURIComponent(
+          item.name
+        )}`,
+        optionapi
+      );
+      const result = await response.json();
 
-    if (result.data?.deletedCount > 0) {
-      getdata();
-      alert("data deleted");
-    } else {
+      if (result.data?.deletedCount > 0) {
+        getdata();
+        alert("data deleted");
+      } else {
+        alert("data not deleted");
+      }
+    } catch (error) {
+      console.error("DELETE error:", error);
       alert("data not deleted");
     }
   };
@@ -121,32 +143,40 @@ function App() {
       return;
     }
 
-    const reqbody = { name, age, mobile, course, email };
+    try {
+      const reqbody = { name, age, mobile, course, email };
 
-    const optionapi = {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(reqbody)
-    };
+      const optionapi = {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(reqbody),
+      };
 
-    const response = await fetch(`https://mymeeshoweb.onrender.com/putdatastudent?name=${isname}`, optionapi);
-    const result = await response.json();
+      const response = await fetch(
+        `https://mymeeshoweb.onrender.com/putdatastudent?name=${encodeURIComponent(
+          isname
+        )}`,
+        optionapi
+      );
+      const result = await response.json();
 
-    if (result.data?.modifiedCount > 0) {
-      getdata();
-      alert("data Updated");
-      handleCancel();
-    } else {
+      if (result.data?.modifiedCount > 0) {
+        getdata();
+        alert("data Updated");
+        handleCancel();
+      } else {
+        alert("data not Updated");
+      }
+    } catch (error) {
+      console.error("PUT error:", error);
       alert("data not Updated");
     }
   };
 
   return (
     <div>
-      {/* <NewCount /> */}
-
       <AddStudentForm
         name={name}
         setName={setName}
@@ -173,7 +203,7 @@ function App() {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            marginBottom: "16px"
+            marginBottom: "16px",
           }}
         >
           <h1 style={{ margin: 0 }}>Student Record</h1>
@@ -187,7 +217,7 @@ function App() {
               border: "none",
               borderRadius: "4px",
               cursor: "pointer",
-              fontSize: "14px"
+              fontSize: "14px",
             }}
           >
             + Add Student
